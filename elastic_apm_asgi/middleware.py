@@ -8,7 +8,7 @@ from starlette.requests import Request
 from starlette.types import ASGIApp, Scope, Receive, Send
 
 
-class SentryMiddleware:
+class APMMiddleware:
     def __init__(self, app: ASGIApp, service_name: str, elastic_config: Dict = None, log_request_info=True,
                  log_request_data=True):
         if elastic_config is None:
