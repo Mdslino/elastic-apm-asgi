@@ -1,0 +1,6 @@
+deploy:
+  provider: pypi
+    user: "Mdslino"
+    password: ""
+    on:
+      tags: true
