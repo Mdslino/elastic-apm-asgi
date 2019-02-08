@@ -23,14 +23,14 @@ class APMMiddleware:
     async def asgi(self, receive: Receive, send: Send, asgi_scope: Scope):
         try:
             inner = self.app(asgi_scope)
-            await self.make_transaction_scope(asgi_scope, receive)
+            await self.make_transaction_scope(asgi_scope)
             await inner(receive, send)
             self.apm_client.end_transaction(self.transaction.get('path', 'lifespan'))
         except Exception as exc:
             self.apm_client.capture_exception()
             raise exc from None
 
-    async def make_transaction_scope(self, asgi_scope: Scope, receive: Receive):
+    async def make_transaction_scope(self, asgi_scope: Scope):
         if asgi_scope['type'] != 'lifespan':
             context = {}
             self.transaction['url'] = self.get_url(asgi_scope)
@@ -67,14 +67,14 @@ class APMMiddleware:
         for key, value in scope["headers"]:
             if key == b"host":
                 host_header = value.decode("latin-1")
-                return "%s://%s%s" % (scheme, host_header, path)
+                return f"{scheme}://{host_header}{path}"
 
         if server is not None:
             host, port = server
             default_port = {"http": 80, "https": 443, "ws": 80, "wss": 443}[scheme]
             if port != default_port:
-                return "%s://%s:%s%s" % (scheme, host, port, path)
-            return "%s://%s%s" % (scheme, host, path)
+                return f"{scheme}://{host}:{port}{path}"
+            return f"{scheme}://{host}{path}"
         return path
 
     def get_query(self, scope: Scope):
@@ -92,7 +92,7 @@ class APMMiddleware:
             key = raw_key.decode("latin-1")
             value = raw_value.decode("latin-1")
             if key in headers:
-                headers[key] = headers[key] + ", " + value
+                headers[key] = f"{headers[key]}, {value}"
             else:
                 headers[key] = value
         return headers
