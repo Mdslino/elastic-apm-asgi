@@ -1,10 +1,8 @@
 import functools
 import urllib
-from json import JSONDecodeError
 from typing import Dict
 
 import elasticapm
-from starlette.requests import Request
 from starlette.types import ASGIApp, Scope, Receive, Send
 
 
@@ -45,16 +43,6 @@ class APMMiddleware:
                                   'query': self.transaction.get('query')})
             elasticapm.set_custom_context(context)
             elasticapm.instrument()
-
-    async def get_request_data(self, asgi_scope: Scope, receive: Receive):
-        if asgi_scope["type"] in ("http", "websocket"):
-            request = Request(asgi_scope, receive)
-            try:
-                request_data = await request.json()
-                return request_data
-            except JSONDecodeError:
-                request_data = await request.body()
-                return request_data.decode()
 
     def get_url(self, scope: Scope):
         """
