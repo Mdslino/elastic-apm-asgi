@@ -9,15 +9,13 @@ from starlette.types import ASGIApp, Scope, Receive, Send
 
 
 class APMMiddleware:
-    def __init__(self, app: ASGIApp, service_name: str, elastic_config: Dict = None, log_request_info=True,
-                 log_request_data=True):
+    def __init__(self, app: ASGIApp, service_name: str, elastic_config: Dict = None, log_request_info=True):
         if elastic_config is None:
             elastic_config = {}
         self.apm_client = elasticapm.Client({'SERVICE_NAME': service_name}, **elastic_config or {})
         self.app = app
         self.transaction = {}
         self.log_request_info = log_request_info
-        self.log_request_data = log_request_data
 
     def __call__(self, scope: Scope):
         return functools.partial(self.asgi, asgi_scope=scope)
@@ -45,9 +43,6 @@ class APMMiddleware:
                                   'url': self.transaction.get('url'),
                                   'path': self.transaction.get('path'),
                                   'query': self.transaction.get('query')})
-            if self.log_request_data:
-                request_data = await self.get_request_data(asgi_scope, receive)
-                context.update(**{'body': request_data})
             elasticapm.set_custom_context(context)
             elasticapm.instrument()
 
