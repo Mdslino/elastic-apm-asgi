@@ -1,15 +1,17 @@
+import ast
 import os
 import re
 
 from setuptools import setup
 
 
-def get_version(package):
-    """
-    Return package version as listed in `__version__` in `init.py`.
-    """
-    init_py = open(os.path.join(package, '__init__.py')).read()
-    return re.search("version = ['\"]([^'\"]+)['\"]", init_py).group(1)
+def get_version() -> str:
+    version_file = open(os.path.join("elastic_apm_asgi", "version.py"), encoding="utf-8")
+    for line in version_file:
+        if line.startswith("__version__"):
+            version = ast.literal_eval(line.split(" = ")[1])
+            return version
+    return "unknown"
 
 
 def get_long_description():
@@ -30,7 +32,7 @@ def get_packages(package):
 
 setup(
     name='Elastic-APM-ASGI',
-    version=get_version('elastic_apm_asgi'),
+    version=get_version(),
     url='https://github.com/Mdslino/Elastic-APM-ASGI',
     license='BSD',
     description='Elastic APM integration for ASGI frameworks.',
