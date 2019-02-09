@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/Mdslino/Elastic-APM-ASGI.svg?branch=master)](https://travis-ci.org/Mdslino/Elastic-APM-ASGI)
