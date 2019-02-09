@@ -16,4 +16,4 @@ deploy:
   distributions: sdist bdist_wheel
   skip_existing: true
   on:
-    tags: true
+    tags: master
