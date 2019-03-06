@@ -7,10 +7,10 @@ from starlette.types import ASGIApp, Scope, Receive, Send
 
 
 class APMMiddleware:
-    def __init__(self, app: ASGIApp, service_name: str, elastic_config: Dict = None, log_request_info=True):
+    def __init__(self, app: ASGIApp, elastic_config: Dict = None, log_request_info=True):
         if elastic_config is None:
             elastic_config = {}
-        self.apm_client = elasticapm.Client({'SERVICE_NAME': service_name}, **elastic_config or {})
+        self.apm_client = elasticapm.Client(elastic_config or {})
         self.app = app
         self.transaction = {}
         self.log_request_info = log_request_info
