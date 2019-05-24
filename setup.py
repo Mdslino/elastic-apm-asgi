@@ -41,7 +41,7 @@ setup(
     author='Marcelo Lino',
     author_email='mdslino@gmail.com',
     packages=get_packages('elastic_apm_asgi'),
-    install_requires=['elastic-apm', 'starlette'],
+    install_requires=['elastic-apm'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
