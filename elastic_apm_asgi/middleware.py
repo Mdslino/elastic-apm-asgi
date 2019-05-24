@@ -14,14 +14,10 @@ class APMMiddleware:
         self.transaction = {}
         self.log_request_info = log_request_info
 
-    def __call__(self, scope):
-        return functools.partial(self.asgi, asgi_scope=scope)
-
-    async def asgi(self, receive, send, asgi_scope):
+    async def __call__(self, scope, receive, send):
         try:
-            inner = self.app(asgi_scope)
-            await self.make_transaction_scope(asgi_scope)
-            await inner(receive, send)
+            await self.make_transaction_scope(scope)
+            await self.app(scope, receive, send)
             self.apm_client.end_transaction(self.transaction.get('path', 'lifespan'))
         except Exception as exc:
             self.apm_client.capture_exception()

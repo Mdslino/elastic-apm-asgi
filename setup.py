@@ -31,7 +31,7 @@ def get_packages(package):
 
 
 setup(
-    name='Elastic-APM-ASGI',
+    name='elastic-apm-asgi',
     version=get_version(),
     url='https://github.com/Mdslino/Elastic-APM-ASGI',
     license='BSD',
