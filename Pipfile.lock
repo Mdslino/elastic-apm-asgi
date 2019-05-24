@@ -1,0 +1,52 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "82f28b8685f0bb9db1d2504b0a1bad9253c610f13b3fde1293c37dc0a286b9d7"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.7"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "certifi": {
+            "hashes": [
+                "sha256:59b7658e26ca9c7339e00f8f4636cdfe59d34fa37b9b04f6f9e9926b3cece1a5",
+                "sha256:b26104d6835d1f5e49452a26eb2ff87fe7090b89dfcaee5ea2212697e1e1d7ae"
+            ],
+            "version": "==2019.3.9"
+        },
+        "elastic-apm": {
+            "hashes": [
+                "sha256:3b5bc1646745ae81435c30822de848acf55579215d6fe3ab3b4d110d87297737",
+                "sha256:4517116d7d11f2f0b64254b196cc7ca251e92b1ed4fe08b294a575b15953a89c",
+                "sha256:7924f4eaa43612a59d094403d007bc701664c219ef2c579b10105780e68f9228",
+                "sha256:a968da6b23f5adadcf7f63cdfe0002e4f0c14e249a2bbef374eacfdf55c64bfb",
+                "sha256:af24b7b827f181e44a885e0ac8c049e8f7ed2daf22b74128b4161d64e58e397d",
+                "sha256:c0df4ee3e5a9bb1694f658f91767ce45cf875164c15d82958d5e48183f1a963f",
+                "sha256:c4b084ed7f6da3a6d6dc67a81c54b90afbd31bc556a02fe443fc4c861066415d",
+                "sha256:e49f1c6c09acadcb3239964181ca9554969fc78d38a02631ec1eb5d51c8ba631",
+                "sha256:e8a9f1a2f51f1afd5a386d28470c134097978d81e81196dee7a228341f6e1502",
+                "sha256:ef996617c87280eb6bd15d1e47d122871e83aff4892ae06e84aa5167cb06ec48",
+                "sha256:faed83fa367a8aca746537311be38cb6908c0a7890a62cbe95a607319f26c3d3"
+            ],
+            "index": "pypi",
+            "version": "==4.2.2"
+        },
+        "urllib3": {
+            "hashes": [
+                "sha256:b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1",
+                "sha256:dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"
+            ],
+            "version": "==1.25.3"
+        }
+    },
+    "develop": {}
+}

@@ -3,11 +3,10 @@ import urllib
 from typing import Dict
 
 import elasticapm
-from starlette.types import ASGIApp, Scope, Receive, Send
 
 
 class APMMiddleware:
-    def __init__(self, app: ASGIApp, elastic_config: Dict = None, log_request_info=True):
+    def __init__(self, app, elastic_config: Dict = None, log_request_info=True):
         if elastic_config is None:
             elastic_config = {}
         self.apm_client = elasticapm.Client(elastic_config or {})
@@ -15,10 +14,10 @@ class APMMiddleware:
         self.transaction = {}
         self.log_request_info = log_request_info
 
-    def __call__(self, scope: Scope):
+    def __call__(self, scope):
         return functools.partial(self.asgi, asgi_scope=scope)
 
-    async def asgi(self, receive: Receive, send: Send, asgi_scope: Scope):
+    async def asgi(self, receive, send, asgi_scope):
         try:
             inner = self.app(asgi_scope)
             await self.make_transaction_scope(asgi_scope)
@@ -28,7 +27,7 @@ class APMMiddleware:
             self.apm_client.capture_exception()
             raise exc from None
 
-    async def make_transaction_scope(self, asgi_scope: Scope):
+    async def make_transaction_scope(self, asgi_scope):
         if asgi_scope['type'] != 'lifespan':
             context = {}
             self.transaction['url'] = self.get_url(asgi_scope)
@@ -44,7 +43,7 @@ class APMMiddleware:
             elasticapm.set_custom_context(context)
             elasticapm.instrument()
 
-    def get_url(self, scope: Scope):
+    def get_url(self, scope):
         """
         Extract URL from the ASGI scope, without also including the querystring.
         """
@@ -65,13 +64,13 @@ class APMMiddleware:
             return f"{scheme}://{host}{path}"
         return path
 
-    def get_query(self, scope: Scope):
+    def get_query(self, scope):
         """
         Extract querystring from the ASGI scope, in the format that the Sentry protocol expects.
         """
         return urllib.parse.unquote(scope["query_string"].decode("latin-1"))
 
-    def get_headers(self, scope: Scope):
+    def get_headers(self, scope):
         """
         Extract headers from the ASGI scope, in the format that the Sentry protocol expects.
         """
@@ -85,7 +84,7 @@ class APMMiddleware:
                 headers[key] = value
         return headers
 
-    def get_transaction(self, scope: Scope):
+    def get_transaction(self, scope):
         """
         Return a transaction string to identify the routed endpoint.
         """
