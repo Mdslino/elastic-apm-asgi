@@ -1,4 +1,3 @@
-import functools
 import urllib
 from typing import Dict
 
@@ -25,18 +24,24 @@ class APMMiddleware:
 
     async def make_transaction_scope(self, asgi_scope):
         if asgi_scope['type'] != 'lifespan':
-            context = {}
+            custom_context = {}
             self.transaction['url'] = self.get_url(asgi_scope)
             self.transaction['path'] = self.get_transaction(asgi_scope)
             self.transaction['headers'] = self.get_headers(asgi_scope)
             self.transaction['query'] = self.get_query(asgi_scope)
             self.apm_client.begin_transaction('request')
             if self.log_request_info:
-                context.update(**{'headers': self.transaction.get('headers'),
+                custom_context.update(**{'headers': self.transaction.get('headers'),
                                   'url': self.transaction.get('url'),
                                   'path': self.transaction.get('path'),
                                   'query': self.transaction.get('query')})
-            elasticapm.set_custom_context(context)
+            elasticapm.set_custom_context(custom_context)
+            elasticapm.set_context({
+                "url": elasticapm.get_url_dict(self.get_url(asgi_scope)),
+                "headers": self.get_headers(asgi_scope),
+                "method": asgi_scope.get("method"),
+                "http_version": asgi_scope.get("http_version"),
+            }, "request")
             elasticapm.instrument()
 
     def get_url(self, scope):
