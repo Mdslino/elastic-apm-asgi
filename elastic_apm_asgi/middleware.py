@@ -37,7 +37,7 @@ class APMMiddleware:
                                   'query': self.transaction.get('query')})
             elasticapm.set_custom_context(custom_context)
             elasticapm.set_context({
-                "url": elasticapm.get_url_dict(self.get_url(asgi_scope)),
+                "url": elasticapm.utils.get_url_dict(self.get_url(asgi_scope)),
                 "headers": self.get_headers(asgi_scope),
                 "method": asgi_scope.get("method"),
                 "http_version": asgi_scope.get("http_version"),
